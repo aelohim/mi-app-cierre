@@ -1,0 +1,85 @@
+{
+  "transferencias": [
+    {
+      "id": "1",
+      "monto": 1000,
+      "fecha": "",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "0b06",
+      "monto": 0.01,
+      "fecha": "2025-12-08",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "cd3e",
+      "monto": 0.06,
+      "fecha": "2025-12-08",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "688c",
+      "monto": 85000,
+      "fecha": "2025-12-08",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "52f9",
+      "monto": 8000,
+      "fecha": "2025-12-09",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "0377",
+      "monto": 5000,
+      "fecha": "2025-12-09",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "8e7b",
+      "monto": 500,
+      "fecha": "2025-12-10",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "4593",
+      "monto": 6000,
+      "fecha": "2025-12-10",
+      "turno": "mañana",
+      "estado": "cargada"
+    },
+    {
+      "id": "c4a7",
+      "monto": 450,
+      "fecha": "2025-12-10",
+      "turno": "mañana",
+      "estado": "cargada"
+    }
+  ],
+  "pagos": [
+    {
+      "id": "1",
+      "monto": 1000,
+      "fecha": "",
+      "turno": "mañana",
+      "estado": "cargada"
+    }
+  ],
+  "errores": [
+    {
+      "id": "1",
+      "monto": 1000,
+      "fecha": "",
+      "turno": "mañana",
+      "estado": "cargada"
+    }
+  ]
+}

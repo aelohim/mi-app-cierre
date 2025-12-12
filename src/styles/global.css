@@ -1,0 +1,19 @@
+/* src/styles/global.css */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* QUITAR LAS FLECHITAS DE TODOS LOS INPUT NUMBER DEL PROYECTO */
+input[type="number"] {
+  -moz-appearance: textfield;         /* Firefox */
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Opcional: un poquito más bonito con Bootstrap */
+input[type="number"] {
+  text-align: right; /* o left, como prefiero right en cantidades */
+}
