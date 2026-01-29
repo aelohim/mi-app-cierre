@@ -4,9 +4,7 @@ import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/global.css'
-//@ts-ignore
-import CajaProvider from './context/CajaContext.jsx'
-
+import CajaProvider from './context/CajaContext.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <CajaProvider>

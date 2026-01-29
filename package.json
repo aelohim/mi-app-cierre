@@ -8,9 +8,10 @@
     "server": "json-server --watch db.json --port 4000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview" 
+    "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.90.1",
     "bootstrap": "^5.3.8",
     "json-server": "^1.0.0-beta.3",
     "react": "^19.2.0",

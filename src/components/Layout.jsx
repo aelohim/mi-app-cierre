@@ -14,6 +14,9 @@ export default function Layout({ children }) {
             <Link className="nav-link" to="/abrir-caja">Abrir Caja</Link>
             <Link className="nav-link" to="/transferencias">Transferencias</Link>
             <Link className="nav-link" to="/cierre-caja">Cierre de Caja</Link>
+            <Link className="nav-link" to="/dashboard">Dashboard</Link>
+            <Link className="nav-link" to="/errores">Errores</Link>
+            <Link className="nav-link" to="/pagos">Pagos</Link>
           </div>
         </div>
       </nav>
