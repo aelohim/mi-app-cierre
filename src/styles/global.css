@@ -1,5 +1,8 @@
 /* src/styles/global.css */
+@import "./variables.css";
 @import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Resto de tus resets y ajustes (flechitas de number, etc.) */
 
 /* QUITAR LAS FLECHITAS DE TODOS LOS INPUT NUMBER DEL PROYECTO */
 input[type="number"] {
@@ -16,4 +19,64 @@ input[type="number"]::-webkit-inner-spin-button {
 /* Opcional: un poquito más bonito con Bootstrap */
 input[type="number"] {
   text-align: right; /* o left, como prefiero right en cantidades */
+}
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Eliminar flechitas de inputs number (muy útil en tu app) */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Mejora usabilidad en móvil */
+input,
+button,
+select,
+textarea {
+  font-size: 1.1rem; /* más legible en teléfono */
+  touch-action: manipulation; /* evita zoom en iOS */
+}
+
+/* Alineación derecha en campos numéricos (montos) */
+input[type="number"],
+.form-control[type="number"] {
+  text-align: right;
+}
+
+/* Opcional: colores de marca (puedes cambiarlos) */
+:root {
+  --primary: #0d6efd;       /* azul Bootstrap */
+  --success: #198754;
+  --danger: #dc3545;
+  --warning: #ffc107;
+  --info: #0dcaf0;
+  --light: #f8f9fa;
+  --dark: #212529;
+}
+
+/* Evitar que el body haga scroll horizontal */
+body {
+  overflow-x: hidden;
+}
+
+/* Si quieres dark mode básico (opcional) */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
 }

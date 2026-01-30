@@ -1,20 +1,21 @@
-// src/api/pagosApi.ts
-
+// src/api/deliverysApi.ts
 import { supabase } from '../lib/supabaseClient';
 
 // Interfaces (adaptadas)
-export interface Pago {
+export interface Delivery {
   id: string;
   monto: number;
-  tipo: 'caja' | 'fuera';
+  tipo: 'efectivo' | 'transferencia';
+  lejano: boolean;
+  direccion?: string | null;
   fecha: string;
   turno: 'mañana' | 'tarde';
-  razon: string;
+  id_delivery: '1' | '2';
   created_at?: string | null;
 }
 
 // Tipo para filtros (mantengo tu Record)
-export type PagosFiltros = Record<string, string | number>;
+export type DeliverysFiltros = Record<string, string | number>;
 
 // Helper para manejar errores (adaptado a Supabase)
 const handleResponse = <T>(data: T | null, error: { message: string } | null): T => {
@@ -28,11 +29,11 @@ const handleResponse = <T>(data: T | null, error: { message: string } | null): T
 };
 
 // GET ALL con filtros opcionales
-export const getPagos = async (
-  filtros: PagosFiltros = {}
-): Promise<Pago[]> => {
+export const getDeliverys = async (
+  filtros: DeliverysFiltros = {}
+): Promise<Delivery[]> => {
   let query = supabase
-    .from('pagos')
+    .from('deliverys')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -51,9 +52,9 @@ export const getPagos = async (
 };
 
 // GET BY ID
-export const getPagoById = async (id: string): Promise<Pago> => {
+export const getDeliveryById = async (id: string): Promise<Delivery> => {
   const { data, error } = await supabase
-    .from('pagos')
+    .from('deliverys')
     .select('*')
     .eq('id', id)
     .single();
@@ -62,12 +63,12 @@ export const getPagoById = async (id: string): Promise<Pago> => {
 };
 
 // POST → Crear
-export const crearPago = async (
-  nuevaPago: Omit<Pago, 'id' | 'created_at'>
-): Promise<Pago> => {
+export const crearDelivery = async (
+  nuevoDelivery: Omit<Delivery, 'id' | 'created_at'>
+): Promise<Delivery> => {
   const { data, error } = await supabase
-    .from('pagos')
-    .insert([nuevaPago])
+    .from('deliverys')
+    .insert([nuevoDelivery])
     .select()
     .single();
 
@@ -75,12 +76,12 @@ export const crearPago = async (
 };
 
 // PUT → Actualizar
-export const actualizarPago = async (
+export const actualizarDelivery = async (
   id: string,
-  datosActualizados: Partial<Omit<Pago, 'id' | 'created_at'>>
-): Promise<Pago> => {
+  datosActualizados: Partial<Omit<Delivery, 'id' | 'created_at'>>
+): Promise<Delivery> => {
   const { data, error } = await supabase
-    .from('pagos')
+    .from('deliverys')
     .update(datosActualizados)
     .eq('id', id)
     .select()
@@ -90,14 +91,14 @@ export const actualizarPago = async (
 };
 
 // DELETE
-export const eliminarPagoApi = async (id: string): Promise<boolean> => {
+export const eliminarDeliveryApi = async (id: string): Promise<boolean> => {
   const { error } = await supabase
-    .from('pagos')
+    .from('deliverys')
     .delete()
     .eq('id', id);
 
   if (error) {
-    throw new Error(error.message || 'Error al eliminar el pago');
+    throw new Error(error.message || 'Error al eliminar el Delivery');
   }
   return true;
 };

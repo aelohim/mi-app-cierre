@@ -8,7 +8,6 @@ import {
 } from '../api/transferenciasApi.ts';
 import {
     getErroresItems,
-    getErrorItemById,
     crearErrorItem,
     actualizarErrorItem,
     eliminarErrorItemApi,
@@ -16,12 +15,18 @@ import {
 } from '../api/erroresApi.ts';
 import {
     getPagos,
-    getPagoById,
     crearPago,
     actualizarPago,
     eliminarPagoApi,
     type Pago
 } from '../api/pagosApi.ts';
+import {
+    getDeliverys,
+    crearDelivery,
+    actualizarDelivery,
+    eliminarDeliveryApi,
+    type Delivery
+} from '../api/deliverysApi.ts';
 
 interface CajaState {
     fecha: string;
@@ -43,9 +48,13 @@ interface CajaContextType {
     editarError: (id: string, datos: Partial<ErrorItem>) => Promise<void>; // Nueva para edits
     eliminarError: (id: string) => Promise<void>; // Nueva para deletes
     pagos: Pago[];
-    agregarPago: (monto: number, tipo: 'caja' | 'fuera', nota?: string) => Promise<void>;
+    agregarPago: (monto: number, tipo: 'caja' | 'fuera', razon: string) => Promise<void>;
     editarPago: (id: string, datos: Partial<Pago>) => Promise<void>; // Nueva para edits
     eliminarPago: (id: string) => Promise<void>; // Nueva para deletes
+    deliverys: Delivery[];
+    agregarDelivery: (monto: number, tipo: 'transferencia' | 'efectivo', id_delivery: '1' | '2', lejano:boolean, direccion?: string) => Promise<void>;
+    editarDelivery: (id: string, datos: Partial<Delivery>) => Promise<void>; // Nueva para edits
+    eliminarDelivery: (id: string) => Promise<void>; // Nueva para deletes
     // Manuales al cierre
     posnet: number;
     setPosnet: (valor: number) => void;
@@ -83,6 +92,7 @@ export default function CajaProvider({ children, }: { children: ReactNode; }): R
     const [transferencias, setTransferencias] = useState<Transferencia[]>([]);
     const [errores, setErrores] = useState<ErrorItem[]>([]);
     const [pagos, setPagos] = useState<Pago[]>([]);
+    const [deliverys, setDeliverys] = useState<Delivery[]>([]);
     const [posnet, setPosnet] = useState<number>(0);
     const [efectivo, setEfectivo] = useState<number>(0);
     const [balanza1, setBalanza1] = useState<number>(0);
@@ -178,6 +188,30 @@ export default function CajaProvider({ children, }: { children: ReactNode; }): R
         cargarPagos();
     }, [caja.abierta, caja.fecha, caja.turno]);
 
+    //Deliverys
+    useEffect(() => {
+        if (!caja.abierta) {
+            setDeliverys([]);
+            return;
+        }
+
+        const cargarDeliverys = async () => {
+            try {
+                const data = await getDeliverys({
+                    fecha: caja.fecha,
+                    turno: caja.turno!,
+                });
+                setDeliverys(data);
+            }
+            catch (error) {
+                console.error("No fue posible cargar las Pago", error);
+                setDeliverys([]);
+            }
+        };
+
+        cargarDeliverys();
+    }, [caja.abierta, caja.fecha, caja.turno]);
+
     //CRUD DE LAS ENTIDADES DE MI BASE********************
 
     //Transferencias: agregar/editar/eliminar
@@ -262,18 +296,19 @@ export default function CajaProvider({ children, }: { children: ReactNode; }): R
     };
 
     //Pagos: agregar/editar/eliminar
-    const agregarPago = async (monto: number, tipo: 'caja' | 'fuera') => {
+    const agregarPago = async (monto: number, tipo: 'caja' | 'fuera', razon: string) => {
         if (!caja.abierta) throw new Error('Caja cerrada');
 
         try {
             const nuevo: Omit<Pago, 'id'> = {
                 monto,
                 tipo,
+                razon,
                 fecha: caja.fecha,
                 turno: caja.turno as 'mañana' | 'tarde', //Si la caja esta abierta el turno no es null
             };
-            const creado = await crearErrorItem(nuevo);
-            setErrores((prev) => [...prev, creado]);
+            const creado = await crearPago(nuevo);
+            setPagos((prev) => [...prev, creado]);
         } catch (error) {
             console.error("No fue posible agregar el error", error);
             throw error;
@@ -291,11 +326,55 @@ export default function CajaProvider({ children, }: { children: ReactNode; }): R
         }
     };
 
-    // NUEVA: eliminar usa API
+        // NUEVA: eliminar usa API
     const eliminarPago = async (id: string) => {
         try {
             await eliminarPagoApi(id);
             setPagos((prev) => prev.filter((p) => p.id !== id));
+        } catch (error) {
+            console.error('Error eliminando Error', error);
+            throw error;
+        }
+    };
+
+     //Deliverys: agregar/editar/eliminar
+    const agregarDelivery = async (monto: number, tipo: 'efectivo' | 'transferencia', id_delivery: '1' | '2', lejano: boolean, direccion?: string) => {
+        if (!caja.abierta) throw new Error('Caja cerrada');
+
+        try {
+            const nuevo: Omit<Delivery, 'id'> = {
+                monto,
+                tipo,
+                direccion,
+                id_delivery,
+                lejano,
+                fecha: caja.fecha,
+                turno: caja.turno as 'mañana' | 'tarde', //Si la caja esta abierta el turno no es null
+            };
+            const creado = await crearDelivery(nuevo);
+            setDeliverys((prev) => [...prev, creado]);
+        } catch (error) {
+            console.error("No fue posible agregar el error", error);
+            throw error;
+        }
+    };
+
+    const editarDelivery = async (id: string, datos: Partial<Delivery>) => {
+        try {
+            const actualizado = await actualizarDelivery(id, datos);
+            setDeliverys((prev) =>
+                prev.map((p) => (p.id === id ? actualizado : p)));
+        } catch (error) {
+            console.error("No fue posible editar la Error", error);
+            throw error;
+        }
+    };
+
+    // NUEVA: eliminar usa API
+    const eliminarDelivery = async (id: string) => {
+        try {
+            await eliminarDeliveryApi(id);
+            setDeliverys((prev) => prev.filter((p) => p.id !== id));
         } catch (error) {
             console.error('Error eliminando Error', error);
             throw error;
@@ -339,6 +418,8 @@ export default function CajaProvider({ children, }: { children: ReactNode; }): R
                 editarError, eliminarError,
                 pagos, agregarPago,
                 editarPago, eliminarPago,
+                deliverys, agregarDelivery,
+                editarDelivery, eliminarDelivery,
                 posnet, setPosnet,
                 efectivo, setEfectivo,
                 balanza1, setBalanza1,

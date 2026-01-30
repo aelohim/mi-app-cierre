@@ -1,9 +1,10 @@
-import TransferenciasPage from '../pages/TransferenciasPage.jsx';
-import AbrirCajaPage from '../pages/AbrirCajaPage.jsx';
-import CierreCajaPage from '../pages/CierreCajaPage.jsx';
-import DashboardPage from '../pages/DashBoardPage.jsx';
-import ErroresPage from '../pages/ErroresPage.jsx';
-import PagosPage from '../pages/PagosPage.jsx';
+import TransferenciasPage from '../pages/TransferenciasPage.tsx';
+import AbrirCajaPage from '../pages/AbrirCajaPage.tsx';
+import CierreCajaPage from '../pages/CierreCajaPage.tsx';
+import DashboardPage from '../pages/DashBoardPage.tsx';
+import ErroresPage from '../pages/ErroresPage.tsx';
+import PagosPage from '../pages/PagosPage.tsx';
+import DeliverysPage from '../pages/DeliverysPage.tsx';
 
 const routesConfig = [
     {
@@ -34,6 +35,12 @@ const routesConfig = [
         path: '/pagos',
         element: <PagosPage />,
         title: 'Pagos',
+        protected: true,
+    },
+     {
+        path: '/deliverys',
+        element: <DeliverysPage />,
+        title: 'Deliveryss',
         protected: true,
     },
     {

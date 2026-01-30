@@ -1,0 +1,50 @@
+/* src/styles/global.css o variables.css */
+
+:root {
+  /* Colores de marca */
+  --bg-main:        #FFF361;         /* Amarillo pastel - fondo general */
+  --navbar-bg:      #1B4822;         /* Verde oscuro - navbar */
+  --text-main:      #403636;         /* Negro claro - textos principales */
+  --green-dark:     #2F753A;         /* Verde claro - contraste */
+  --green-light:    #5FBA6D;         /* Verde más claro - éxito, semáforo bueno */
+  --yellow-vivid:   #FCEA10;         /* Amarillo original - CTA, semáforo regular */
+  --red-error:      #E44C4C;         /* Rojo - errores, borrar */
+  --blue-edit:      #4891FF;         /* Azul claro - editar */
+  --white:          #FFFFFF;
+
+  /* Mapeo a Bootstrap (overrides) */
+  --bs-primary:     var(--yellow-vivid);
+  --bs-success:     var(--green-light);
+  --bs-danger:      var(--red-error);
+  --bs-info:        var(--blue-edit);
+  --bs-secondary:   var(--green-dark);
+  --bs-body-bg:     var(--bg-main);
+  --bs-body-color:  var(--text-main);
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* Navbar */
+.navbar-dark {
+  background-color: var(--navbar-bg) !important;
+}
+
+/* Botones grandes para móvil */
+.btn-lg {
+  font-size: 1.25rem;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Inputs grandes */
+.form-control-lg {
+  font-size: 1.25rem;
+  padding: 0.75rem 1rem;
+}
+
+/* Semáforo en tablas/celdas */
+.bg-semaforo-bueno   { background-color: var(--green-light) !important; color: white; }
+.bg-semaforo-regular { background-color: var(--yellow-vivid) !important; color: #403636; }
+.bg-semaforo-malo    { background-color: var(--red-error) !important; color: white; }
