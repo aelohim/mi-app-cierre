@@ -1,6 +1,7 @@
 // src/pages/PagosPage.tsx
 import { useState, useEffect } from 'react';
 import { useCaja } from '../context/CajaContext';
+import { type Pago } from '../api/pagosApi';
 
 export default function PagosPage() {
   const {
@@ -14,7 +15,7 @@ export default function PagosPage() {
   const [monto, setMonto] = useState<string>('');
   const [tipo, setTipo] = useState<'caja' | 'fuera'>('caja');
   const [razon, setRazon] = useState<string>('');
-  const [editando, setEditando] = useState<{ id: number; monto: number; tipo: 'caja' | 'fuera'; razon: string } | null>(null);
+  const [editando, setEditando] = useState<{ id: string; monto: number; tipo: 'caja' | 'fuera'; razon: string } | null>(null);
   const [cargandoOperacion, setCargandoOperacion] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
@@ -31,7 +32,7 @@ export default function PagosPage() {
     }
   }, [editando]);
 
-  const comenzarEdicion = (pago: { id: number; monto: number; tipo: 'caja' | 'fuera'; razon: string }) => {
+  const comenzarEdicion = (pago: Pago) => {
     setEditando({ id: pago.id, monto: pago.monto, tipo: pago.tipo, razon: pago.razon });
     setErrorMsg('');
   };
@@ -74,7 +75,7 @@ export default function PagosPage() {
     }
   };
 
-  const handleEliminar = async (id: number) => {
+  const handleEliminar = async (id: string) => {
     if (!confirm('¿Seguro que quieres eliminar este pago?')) return;
 
     setCargandoOperacion(true);
