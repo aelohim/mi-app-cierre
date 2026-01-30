@@ -215,14 +215,13 @@ export default function CajaProvider({ children, }: { children: ReactNode; }): R
     //CRUD DE LAS ENTIDADES DE MI BASE********************
 
     //Transferencias: agregar/editar/eliminar
-    const agregarTransferencia = async (monto: number, nota?: string, esDelivery = false) => {
+    const agregarTransferencia = async (monto: number, nota?: string) => {
         if (!caja.abierta) throw new Error('Caja cerrada');
 
         try {
             const nueva: Omit<Transferencia, 'id'> = {
                 monto,
                 nota,
-                es_delivery: esDelivery,
                 fecha: caja.fecha,
                 turno: caja.turno as 'mañana' | 'tarde', //Si la caja esta abierta el turno no es null
             };

@@ -15,7 +15,7 @@ export default function ErroresPage() {
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   const [monto, setMonto] = useState<string>('');
-  const [editando, setEditando] = useState<{ id: number; monto: number } | null>(null);
+  const [editando, setEditando] = useState<{ id: string; monto: number } | null>(null);
 
   // Llenar input cuando editamos
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function ErroresPage() {
     }
   }, [editando]);
 
-  const comenzarEdicion = (errorItem: { id: number; monto: number }) => {
+  const comenzarEdicion = (errorItem: { id: string; monto: number }) => {
     setEditando({ id: errorItem.id, monto: errorItem.monto });
     setErrorMsg('');
   };
@@ -64,7 +64,7 @@ export default function ErroresPage() {
     }
   };
 
-  const handleEliminar = async (id: number) => {
+  const handleEliminar = async (id: string) => {
     if (!confirm('¿Seguro que quieres eliminar este error?')) return;
 
     setCargandoOperacion(true);
@@ -80,7 +80,7 @@ export default function ErroresPage() {
   const totalErrores = errores.reduce((acc, e) => acc + e.monto, 0);
 
   // Semáforo para total de errores (ejemplo: rojo si > umbral, puedes ajustar)
-  const semaforoTotal = totalErrores > 5000 ? 'danger' : totalErrores > 1000 ? 'warning' : 'success';
+  //const semaforoTotal = totalErrores > 5000 ? 'danger' : totalErrores > 1000 ? 'warning' : 'success';
 
   return (
     <div

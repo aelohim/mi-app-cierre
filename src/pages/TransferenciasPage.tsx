@@ -1,6 +1,7 @@
 // src/pages/TransferenciasPage.tsx
 import { useState, useEffect } from 'react';
 import { useCaja } from '../context/CajaContext';
+import { type Transferencia } from '../api/transferenciasApi';
 
 export default function TransferenciasPage() {
   const {
@@ -14,7 +15,7 @@ export default function TransferenciasPage() {
   const [monto, setMonto] = useState<string>('');
   const [nota, setNota] = useState<string>('');
   const [esDelivery, setEsDelivery] = useState<boolean>(false);
-  const [editando, setEditando] = useState<{ id: number; monto: number; nota?: string; esDelivery: boolean } | null>(null);
+  const [editando, setEditando] = useState<{ id: string; monto: number; nota?: string } | null>(null);
   const [cargandoOperacion, setCargandoOperacion] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
@@ -25,7 +26,6 @@ export default function TransferenciasPage() {
     if (editando) {
       setMonto(editando.monto.toString());
       setNota(editando.nota || '');
-      setEsDelivery(editando.esDelivery);
     } else {
       setMonto('');
       setNota('');
@@ -33,11 +33,15 @@ export default function TransferenciasPage() {
     }
   }, [editando]);
 
-  const comenzarEdicion = (t: { id: number; monto: number; nota?: string; esDelivery: boolean }) => {
-    setEditando({ id: t.id, monto: t.monto, nota: t.nota, esDelivery: t.esDelivery });
+  const comenzarEdicion = (t: Transferencia) => {
+    setEditando({
+      id: t.id,
+      monto: t.monto,
+      // Usamos || undefined para que si es null, se guarde como undefined
+      nota: t.nota || undefined
+    });
     setErrorMsg('');
   };
-
   const cancelarEdicion = () => {
     setEditando(null);
     setErrorMsg('');
@@ -57,10 +61,9 @@ export default function TransferenciasPage() {
 
     try {
       if (editando) {
-        await editarTransferencia(editando.id, {
+        await editarTransferencia(editando.id.toString(), {
           monto: montoNum,
           nota: nota || undefined,
-          esDelivery,
         });
         setEditando(null);
       } else {
@@ -76,7 +79,7 @@ export default function TransferenciasPage() {
     }
   };
 
-  const handleEliminar = async (id: number) => {
+  const handleEliminar = async (id: string) => {
     if (!confirm('¿Seguro que quieres eliminar esta transferencia?')) return;
 
     setCargandoOperacion(true);
@@ -187,8 +190,8 @@ export default function TransferenciasPage() {
                   {cargandoOperacion
                     ? 'Guardando...'
                     : editando
-                    ? 'Actualizar'
-                    : 'Cargar Transferencia'}
+                      ? 'Actualizar'
+                      : 'Cargar Transferencia'}
                 </button>
 
                 {editando && (
@@ -253,7 +256,6 @@ export default function TransferenciasPage() {
                           ${t.monto.toFixed(2)}
                         </td>
                         <td>{t.nota || '-'}</td>
-                        <td>{t.esDelivery ? 'Sí' : 'No'}</td>
                         <td>
                           <button
                             onClick={() => comenzarEdicion(t)}

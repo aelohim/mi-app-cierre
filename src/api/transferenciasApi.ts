@@ -7,7 +7,6 @@ export interface Transferencia {
   id: string;  // Supabase usa UUID → string
   monto: number;
   nota?: string | null;
-  es_delivery?: boolean | null;
   fecha: string;
   turno: 'mañana' | 'tarde';
   created_at?: string | null;  // generado por Supabase
