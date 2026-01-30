@@ -69,7 +69,7 @@ export default function ErroresPage() {
 
     setCargandoOperacion(true);
     try {
-      await eliminarError(id);
+      await eliminarError(id.toString());
     } catch (err) {
       setErrorMsg('Error al eliminar');
     } finally {
