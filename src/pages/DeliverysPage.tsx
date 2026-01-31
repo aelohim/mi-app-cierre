@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useCaja } from '../context/CajaContext';
 import { type Delivery} from '../api/deliverysApi';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 export default function DeliverysPage() {
   const {
@@ -12,6 +13,7 @@ export default function DeliverysPage() {
     eliminarDelivery,
   } = useCaja();
 
+  const [monto, setMonto] = useState<number>(0)
   const [dentroCiudad, setDentroCiudad] = useState<boolean>(true);
   const [tipoPago, setTipoPago] = useState<'efectivo' | 'transferencia'>('efectivo');
   const [direccion, setDireccion] = useState<string>('');
@@ -53,6 +55,7 @@ export default function DeliverysPage() {
     e.preventDefault();
 
     const montoEnvio = dentroCiudad ? 1000 : 1200;
+    const montoTotal = monto + montoEnvio;
     const lejano = !dentroCiudad;
 
     setCargandoOperacion(true);
@@ -61,7 +64,7 @@ export default function DeliverysPage() {
     try {
       if (editando) {
         await editarDelivery(editando.id, {
-          monto: montoEnvio,
+          monto: montoTotal,
           tipo: tipoPago,
           lejano,
           direccion: direccion || null,
@@ -71,7 +74,7 @@ export default function DeliverysPage() {
       } else {
         // ¡AHORA SÍ! Respeta exactamente la firma del contexto
         await agregarDelivery(
-          montoEnvio,        // ← number
+          montoTotal,        // ← number
           tipoPago,          // ← 'efectivo' | 'transferencia'
           idDelivery,        // ← '1' | '2' (va antes que lejano)
           lejano,            // ← boolean
@@ -81,6 +84,7 @@ export default function DeliverysPage() {
 
       // Resetear formulario
       setDentroCiudad(true);
+      setMonto(0);
       setTipoPago('efectivo');
       setDireccion('');
       setIdDelivery('1');
@@ -171,6 +175,21 @@ export default function DeliverysPage() {
                     placeholder="Ej: Calle 123, Barrio Centro"
                     value={direccion}
                     onChange={(e) => setDireccion(e.target.value)}
+                    className="form-control form-control-lg"
+                    style={{ borderColor: '#5FBA6D' }}
+                    disabled={cargandoOperacion}
+                  />
+                </div>
+
+                <div className="col-12">
+                  <label htmlFor="monto" className="form-label fw-semibold">
+                    Monto
+                  </label>
+                  <input
+                    id="monto"
+                    type="number"
+                    value={monto}
+                    onChange={(e) => setMonto(Number(e.target.value))}
                     className="form-control form-control-lg"
                     style={{ borderColor: '#5FBA6D' }}
                     disabled={cargandoOperacion}
@@ -279,28 +298,20 @@ export default function DeliverysPage() {
                         <td>{d.lejano ? 'Fuera ciudad ($1200)' : 'Dentro ciudad ($1000)'}</td>
                         <td>{d.direccion || '-'}</td>
                         <td>Delivery {d.id_delivery}</td>
-                        <td>
+                        <td className='actions-container'>
                           <button
                             onClick={() => comenzarEdicion(d)}
-                            className="btn btn-sm me-2"
-                            style={{
-                              backgroundColor: '#4891FF',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-edit"
                             disabled={cargandoOperacion}
                           >
-                            Editar
+                            <FiEdit size={20}></FiEdit>
                           </button>
                           <button
                             onClick={() => handleEliminar(d.id)}
-                            className="btn btn-sm"
-                            style={{
-                              backgroundColor: '#E44C4C',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-delete"
                             disabled={cargandoOperacion}
                           >
-                            Eliminar
+                            <FiTrash2 size={20}/>
                           </button>
                         </td>
                       </tr>

@@ -1,6 +1,7 @@
 // src/pages/ErroresPage.tsx
 import { useState, useEffect } from 'react';
 import { useCaja } from '../context/CajaContext';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';  // Feather Icons
 
 export default function ErroresPage() {
   const {
@@ -210,28 +211,20 @@ export default function ErroresPage() {
                           -${Number(e.monto).toFixed(2)}
                         </td>
                         <td className="text-muted small">#{String(e.id).slice(-6)}</td>
-                        <td>
+                        <td className='actions-container'>
                           <button
                             onClick={() => comenzarEdicion(e)}
-                            className="btn btn-sm me-2"
-                            style={{
-                              backgroundColor: '#4891FF',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-edit"
                             disabled={cargandoOperacion}
                           >
-                            Editar
+                            <FiEdit size={20}/>
                           </button>
                           <button
                             onClick={() => handleEliminar(e.id)}
-                            className="btn btn-sm"
-                            style={{
-                              backgroundColor: '#E44C4C',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-delete"
                             disabled={cargandoOperacion}
                           >
-                            Eliminar
+                            <FiTrash2 size={20}/>
                           </button>
                         </td>
                       </tr>

@@ -80,3 +80,43 @@ body {
     color: #e0e0e0;
   }
 }
+
+/* Estilos para botones action como editar y eliminar*/
+.btn-action {
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10%;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+btn-action:hover {
+  transform: scale(1.1); /* Efecto zoom al hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-edit {
+  background-color: var(--primary);
+  color: var(--light);
+}
+
+.btn-delete {
+  background-color: var(--danger);
+  color: var(--light);
+}
+
+/* Contenedor para alinear botones horizontalmente */
+.actions-container {
+  display: flex;
+  gap: 0.5rem; /* Espacio entre botones */
+  justify-content: center;
+  flex-wrap: nowrap; /* Impide salto de línea */
+}

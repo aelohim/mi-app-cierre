@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useCaja } from '../context/CajaContext';
 import { type Transferencia } from '../api/transferenciasApi';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';  // Feather Icons
 
 export default function TransferenciasPage() {
   const {
@@ -12,9 +13,8 @@ export default function TransferenciasPage() {
     eliminarTransferencia,
   } = useCaja();
 
-  const [monto, setMonto] = useState<string>('');
+  const [monto, setMonto] = useState<number>(0);
   const [nota, setNota] = useState<string>('');
-  const [esDelivery, setEsDelivery] = useState<boolean>(false);
   const [editando, setEditando] = useState<{ id: string; monto: number; nota?: string } | null>(null);
   const [cargandoOperacion, setCargandoOperacion] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -24,12 +24,11 @@ export default function TransferenciasPage() {
   // Llenar formulario cuando editamos
   useEffect(() => {
     if (editando) {
-      setMonto(editando.monto.toString());
+      setMonto(editando.monto);
       setNota(editando.nota || '');
     } else {
-      setMonto('');
+      setMonto(0);
       setNota('');
-      setEsDelivery(false);
     }
   }, [editando]);
 
@@ -50,7 +49,7 @@ export default function TransferenciasPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const montoNum = Number(monto);
+    const montoNum = monto;
     if (!monto || isNaN(montoNum) || montoNum <= 0) {
       setErrorMsg('Ingresa un monto válido mayor a 0');
       return;
@@ -67,11 +66,10 @@ export default function TransferenciasPage() {
         });
         setEditando(null);
       } else {
-        await agregarTransferencia(montoNum, nota || undefined, esDelivery);
+        await agregarTransferencia(montoNum, nota || undefined);
       }
-      setMonto('');
+      setMonto(0);
       setNota('');
-      setEsDelivery(false);
     } catch (err) {
       setErrorMsg('Error al guardar la transferencia');
     } finally {
@@ -124,13 +122,13 @@ export default function TransferenciasPage() {
                   Monto
                 </label>
                 <input
-                  id="monto"
+                  id="monto" 
                   type="number"
                   step="0.01"
                   min="0"
                   placeholder="0.00"
                   value={monto}
-                  onChange={(e) => setMonto(e.target.value)}
+                  onChange={(e) => setMonto(Number(e.target.value))}
                   className="form-control form-control-lg text-end"
                   style={{
                     borderColor: '#5FBA6D', // Verde más claro
@@ -157,23 +155,6 @@ export default function TransferenciasPage() {
                   }}
                   disabled={cargandoOperacion}
                 />
-              </div>
-
-              <div className="mb-4 form-check">
-                <input
-                  id="delivery"
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={esDelivery}
-                  onChange={(e) => setEsDelivery(e.target.checked)}
-                  disabled={cargandoOperacion}
-                  style={{
-                    borderColor: '#5FBA6D',
-                  }}
-                />
-                <label htmlFor="delivery" className="form-check-label fw-semibold">
-                  Es Delivery (transferencia al repartidor)
-                </label>
               </div>
 
               <div className="d-grid gap-3">
@@ -244,7 +225,6 @@ export default function TransferenciasPage() {
                       <th>#</th>
                       <th>Monto</th>
                       <th>Nota</th>
-                      <th>Delivery</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -256,28 +236,26 @@ export default function TransferenciasPage() {
                           ${t.monto.toFixed(2)}
                         </td>
                         <td>{t.nota || '-'}</td>
-                        <td>
+                        <td className="actions-container text-center">
                           <button
                             onClick={() => comenzarEdicion(t)}
-                            className="btn btn-sm me-2"
-                            style={{
-                              backgroundColor: '#4891FF',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-edit"
+                            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                            title="Editar"
                             disabled={cargandoOperacion}
                           >
-                            Editar
+                            <FiEdit size={20} />
                           </button>
                           <button
                             onClick={() => handleEliminar(t.id)}
-                            className="btn btn-sm"
-                            style={{
-                              backgroundColor: '#E44C4C',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-delete"
+                            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                            title="Eliminar"
                             disabled={cargandoOperacion}
                           >
-                            Eliminar
+                            <FiTrash2 size={20} />
                           </button>
                         </td>
                       </tr>

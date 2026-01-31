@@ -16,6 +16,7 @@ export default function Layout({ children }: LayoutProps) {
         { path: '/transferencias', label: 'Transferencias' },
         { path: '/errores', label: 'Errores' },
         { path: '/pagos', label: 'Pagos' },
+        { path: '/deliverys', label: 'Deliverys'},
         { path: '/cierre-caja', label: 'Cierre' },
         { path: '/dashboard', label: 'Dashboard' },
       ]

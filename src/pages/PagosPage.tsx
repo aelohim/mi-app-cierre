@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useCaja } from '../context/CajaContext';
 import { type Pago } from '../api/pagosApi';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 export default function PagosPage() {
   const {
@@ -281,28 +282,20 @@ export default function PagosPage() {
                         </td>
                         <td>{p.razon}</td>
                         <td className="text-muted small">#{String(p.id).slice(-6)}</td>
-                        <td>
+                        <td className='actions-container'>
                           <button
                             onClick={() => comenzarEdicion(p)}
-                            className="btn btn-sm me-2"
-                            style={{
-                              backgroundColor: '#4891FF',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-edit"
                             disabled={cargandoOperacion}
                           >
-                            Editar
+                            <FiEdit size={20}></FiEdit>
                           </button>
                           <button
                             onClick={() => handleEliminar(p.id)}
-                            className="btn btn-sm"
-                            style={{
-                              backgroundColor: '#E44C4C',
-                              color: '#FFFFFF',
-                            }}
+                            className="btn-action btn-delete"
                             disabled={cargandoOperacion}
                           >
-                            Eliminar
+                          <FiTrash2 size={20}></FiTrash2>
                           </button>
                         </td>
                       </tr>
